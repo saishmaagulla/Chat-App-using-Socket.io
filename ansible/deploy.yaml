@@ -1,0 +1,49 @@
+---
+- hosts: webservers
+  tasks:
+  - name: install nodejs
+    apt: name=nodejs update_cache=yes state=latest
+  
+  - name: install npm
+    apt: name=npm update_cache=yes state=latest
+
+  - name: install pm2
+    become: true
+    become_user: root
+    shell: npm i -f pm2
+
+  - name: clone the application
+    git:
+      repo: https://github.com/saishmaagulla/Chat-App-using-Socket.io.git
+      version: master
+      dest: /home/ubuntu
+    become: no
+
+  - name: start the application using pm2
+    shell: cd Chat-App-using-Socket.io && pm2 start app.js
+
+  - name: install nginx
+    apt: name=nginx update_cache=yes state=latest
+
+  - name: remove default site from nginx
+    shell: rm /etc/nginx/sites-available/default
+    become: yes
+
+  - name: configure nginx 
+    copy:
+      src: app.conf
+      destination: /etc/nginx/sites-available/app.conf
+    become: yes
+  
+  - name: create symlink
+    file:
+      src: /etc/nginx/sites-available/app.conf
+      dest: /etc/nginx/sites-enabled/app.conf
+      state: link
+    become: yes
+  
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+    become: yes

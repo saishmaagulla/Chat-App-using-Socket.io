@@ -1,15 +1,18 @@
 variable "cidr_block" {
 	type = string
-	default = "10.0.0.0/16"
+	default = "10.0.0.0/24"
 }
 
 variable "public_subnets_cidr" {
 	type = list
 	description = "CIDR for subnets"
 	default = [
-	"10.0.1.0/24",
-	"10.0.2.0/24"
+	"10.0.0.0/25",
+	"10.0.0.128/25"
 	]	
+}
+variable "local_ip" {
+	type = string
 }
 
 variable "env" {
