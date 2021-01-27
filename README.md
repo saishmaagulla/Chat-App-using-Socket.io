@@ -3,6 +3,10 @@ A simple chat app using socket.io
   
 See it in action - [Kunal Chat App](https://kunal-chat-app.herokuapp.com)
 
+For launching ec2 Instances I used autoscaling group via launch configurations
+
+Here I am using pm2 tool to run the node js application and nginx as proxy server
+
 Run terraform as below
 
 1. terraform plan
